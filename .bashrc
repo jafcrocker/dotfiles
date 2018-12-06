@@ -112,6 +112,23 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+export PATH=$PATH:~/bin
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Devel
+source /usr/local/bin/virtualenvwrapper.sh
+
 source $(zendev bootstrap)
-zendev use $(zendev env); cd
+source <(jig bootstrap)
+
+alias yaml2json="python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)'"
 alias rm_zenoss_images="docker images | awk '/localhost:5000/{print \$1\":\"\$2}' | xargs docker rmi"
+alias git_head="git symbolic-ref --short HEAD"
+alias dc="docker-compose"; complete -F _docker_compose dc
+alias socker="DOCKER_HOST=swarm.zenoss.eng:2376 docker";  complete -F _docker socker
+
+source <(kubectl completion bash)
+alias kc="kubectl"; complete -o default -F __start_kubectl kc
+
+# The next line enables bash completion for gcloud.
+[ -f "$HOME/google-cloud-sdk/completion.bash.inc" ] && source "$HOME/google-cloud-sdk/completion.bash.inc"
